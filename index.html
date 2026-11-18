@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRIVANT A.L | Insurtech &amp; E-Commerce Petcare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            void: '#05050b',
+            panel: '#0d0d1a',
+            neonPurple: '#a855f7',
+            neonCyan: '#06b6d4',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #05050b;
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Fondo estilo Tron con cuadrícula sutil */
+    .tron-grid {
+      background-image:
+        linear-gradient(to right, rgba(168, 85, 247, 0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
+      background-size: 46px 46px;
+    }
+
+    .tron-hero-glow {
+      background:
+        radial-gradient(circle at 20% 25%, rgba(168, 85, 247, 0.22), transparent 45%),
+        radial-gradient(circle at 80% 30%, rgba(6, 182, 212, 0.18), transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(124, 58, 237, 0.14), transparent 50%);
+    }
+
+    .neon-card {
+      background: linear-gradient(160deg, rgba(16, 16, 32, 0.92), rgba(9, 9, 20, 0.96));
+      border: 1px solid rgba(168, 85, 247, 0.28);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .neon-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(34, 211, 238, 0.72);
+      box-shadow: 0 0 26px rgba(168, 85, 247, 0.24), 0 0 12px rgba(6, 182, 212, 0.18);
+    }
+
+    .neon-btn-primary {
+      background: linear-gradient(90deg, #9333ea 0%, #6366f1 50%, #06b6d4 100%);
+      box-shadow: 0 0 18px rgba(147, 51, 234, 0.45);
+      transition: all 0.25s ease;
+    }
+
+    .neon-btn-primary:hover {
+      filter: brightness(1.12);
+      box-shadow: 0 0 26px rgba(6, 182, 212, 0.55), 0 0 14px rgba(168, 85, 247, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .neon-text-gradient {
+      background: linear-gradient(90deg, #e9d5ff 0%, #c084fc 45%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass-nav {
+      background: rgba(5, 5, 11, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.22);
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #05050b; }
+    ::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+    @keyframes pulseBorder {
+      0%, 100% { box-shadow: 0 0 12px rgba(168, 85, 247, 0.35); }
+      50% { box-shadow: 0 0 22px rgba(6, 182, 212, 0.55); }
+    }
+    .pulse-neon { animation: pulseBorder 3s infinite; }
+
+    /* ==================== PARCHE 1: IMPRESIÓN PDF ROBUSTA ==================== */
+    @media print {
+      html,
+      body,
+      #receipt-printable,
+      #receipt-printable * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      html,
+      body {
+        background: #0d0d1a !important;
+        overflow: visible !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* Oculta el resto de la página para evitar hojas vacías o superposiciones */
+      header,
+      section,
+      footer,
+      #product-modal,
+      #cart-drawer,
+      #toast,
+      .no-print {
+        display: none !important;
+      }
+
+      /* Resetea posicionamiento y scroll del modal padre para no recortar el recibo */
+      #checkout-modal {
+        display: block !important;
+        position: static !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+        background: #0d0d1a !important;
+        overflow: visible !important;
+      }
+
+      #checkout-modal-panel {
+        position: static !important;
+        max-height: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        overflow: visible !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: none !important;
+        background: #0d0d1a !important;
+        padding: 16px !important;
+      }
+
+      #receipt-printable {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        background-color: #0d0d1a !important;
+        color: #f8fafc !important;
+        border: 2px solid #a855f7 !important;
+        border-radius: 16px !important;
+        padding: 20px !important;
+      }
+
+      /* Bordes sólidos visibles y alto contraste incluso si el navegador omite fondos */
+      #receipt-printable .print-box {
+        background-color: #05050b !important;
+        border: 1.5px solid #475569 !important;
+        color: #f8fafc !important;
+        break-inside: avoid;
+      }
+
+      #receipt-printable .print-accent-text {
+        color: #22d3ee !important;
+      }
+    }
+  </style>
+</head>
+<body class="tron-grid min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="glass-nav sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <!-- Logo Monograma A.L -->
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-950 to-slate-950 border border-purple-500/70 flex items-center justify-center pulse-neon group-hover:border-cyan-400 transition">
+          <svg viewBox="0 0 48 48" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M9 36L19 11L27 36" stroke="#c084fc" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 27H24" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round"/>
+            <path d="M30 12V35H40" stroke="#22d3ee" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="28.5" cy="35" r="2" fill="#a855f7"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-lg sm:text-xl tracking-wider text-white block leading-none">
+            TRIVANT <span class="text-cyan-400">A.L</span>
+          </span>
+          <span class="text-[11px] uppercase tracking-[0.22em] text-purple-300/80">Insurtech &amp; Petcare</span>
+        </div>
+      </a>
+
+      <!-- Links de navegación escritorio -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300" aria-label="Navegación principal">
+        <a href="#inicio" class="hover:text-cyan-300 transition">Inicio</a>
+        <a href="#catalogo" class="hover:text-cyan-300 transition">Catálogo</a>
+        <a href="#flujo-compra" class="hover:text-cyan-300 transition">Cómo Comprar</a>
+        <a href="#modelo-negocio" class="hover:text-cyan-300 transition">Modelo de Negocio</a>
+        <a href="#contacto" class="hover:text-cyan-300 transition">Contacto</a>
+      </nav>
+
+      <!-- Acciones (Carrito + Menú hamburguesa móvil) -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <button type="button" onclick="openCart()" class="relative flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl bg-purple-950/70 border border-purple-500/50 hover:border-cyan-400 hover:bg-purple-900/60 transition text-sm font-semibold text-white">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span class="hidden sm:inline">Carrito</span>
+          <span id="nav-cart-badge" class="min-w-[22px] h-[22px] px-1.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 text-void font-bold text-xs flex items-center justify-center">0</span>
+        </button>
+
+        <!-- PARCHE 2: Botón hamburguesa accesible para móvil -->
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          onclick="toggleMobileMenu()"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          class="md:hidden w-11 h-11 rounded-xl bg-slate-900/90 border border-purple-500/45 hover:border-cyan-400 text-slate-200 hover:text-white flex items-center justify-center transition"
+        >
+          <svg id="mobile-menu-icon-open" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="mobile-menu-icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- PARCHE 2: Menú desplegable móvil -->
+    <nav id="mobile-menu" class="hidden md:hidden border-t border-purple-500/25 bg-panel/95 backdrop-blur-xl" aria-label="Navegación móvil">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1.5 text-sm font-medium text-slate-200">
+        <a href="#inicio" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-purple-950/70 hover:text-cyan-300 transition">Inicio</a>
+        <a href="#catalogo" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-purple-950/70 hover:text-cyan-300 transition">Catálogo</a>
+        <a href="#flujo-compra" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-purple-950/70 hover:text-cyan-300 transition">Cómo Comprar</a>
+        <a href="#modelo-negocio" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-purple-950/70 hover:text-cyan-300 transition">Modelo de Negocio</a>
+        <a href="#contacto" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-purple-950/70 hover:text-cyan-300 transition">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ==================== HERO / INICIO ==================== -->
+  <section id="inicio" class="relative tron-hero-glow border-b border-purple-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <div class="grid lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/80 border border-purple-500/50 text-xs font-semibold tracking-wide text-cyan-300">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            PLATAFORMA HÍBRIDA · INSURTECH + E-COMMERCE PETCARE
+          </div>
+
+          <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">
+            Protección Inteligente para <span class="neon-text-gradient">Toda tu Familia</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed border-l-2 border-cyan-400 pl-4 italic">
+            “Porque la familia se compone de quienes amas —incluyendo a los de cuatro patas—, simplificamos su protección y su cuidado en un solo lugar.”
+          </p>
+
+          <p class="text-sm sm:text-base text-slate-400 max-w-2xl">
+            Contrata pólizas digitales para tu auto, tu familia y tu mascota en minutos, y surte alimento, farmacia y tecnología Petcare desde el mismo carrito con beneficios cruzados automáticos.
+          </p>
+
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#catalogo" class="neon-btn-primary px-7 py-3.5 rounded-xl font-bold text-white text-sm sm:text-base inline-flex items-center gap-2">
+              Explorar Catálogo
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+            <a href="#modelo-negocio" class="px-7 py-3.5 rounded-xl font-semibold text-cyan-300 border border-cyan-400/50 bg-cyan-950/20 hover:bg-cyan-950/50 transition text-sm sm:text-base">
+              Ver Modelo de Negocio
+            </a>
+          </div>
+
+          <!-- Métricas rápidas -->
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-purple-500/20 max-w-xl">
+            <div>
+              <p class="font-display text-2xl font-bold text-cyan-400">10%</p>
+              <p class="text-xs text-slate-400">Descuento Híbrido Automático</p>
+            </div>
+            <div>
+              <p class="font-display text-2xl font-bold text-purple-400">60 seg</p>
+              <p class="text-xs text-slate-400">Emisión Digital de Pólizas</p>
+            </div>
+            <div>
+              <p class="font-display text-2xl font-bold text-white">24/7</p>
+              <p class="text-xs text-slate-400">Asistencia Vial, Médica y Vet</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Visual Tron Derecha -->
+        <div class="lg:col-span-5">
+          <div class="neon-card rounded-2xl p-6 sm:p-7 relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-purple-600/25 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl"></div>
+
+            <div class="relative z-10 space-y-5">
+              <div class="flex items-center justify-between border-b border-purple-500/25 pb-4">
+                <div>
+                  <p class="text-xs font-mono uppercase tracking-widest text-cyan-400">Ecosistema TRIVANT A.L</p>
+                  <h2 class="font-display text-lg font-bold text-white mt-0.5">Beneficio Cruzado Activo</h2>
+                </div>
+                <span class="px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 text-xs font-bold">ONLINE</span>
+              </div>
+
+              <div class="space-y-3">
+                <div class="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-lg bg-purple-600/20 border border-purple-400/40 flex items-center justify-center shrink-0 text-purple-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">1. Vertical Insurtech</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Seguros de Auto, Gastos Médicos Familiares y PetShield con póliza digital inmediata.</p>
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center shrink-0 text-cyan-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">2. Vertical E-Commerce Petcare</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Nutrición holística, botiquín veterinario y collares GPS con entrega a domicilio.</p>
+                  </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-gradient-to-r from-purple-950/90 to-cyan-950/70 border border-cyan-400/45">
+                  <p class="text-xs font-bold uppercase tracking-wider text-cyan-300">Regla Inteligente del Carrito</p>
+                  <p class="text-xs text-slate-200 mt-1">
+                    Combina <strong>1 Seguro + 1 Producto Petcare</strong> en tu pedido para desbloquear automáticamente <strong>10% de descuento híbrido + envío gratis</strong>.
+                  </p>
+                </div>
+              </div>
+
+              <button type="button" onclick="addDemoCombo()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-purple-900/60 border border-purple-400/50 text-xs font-bold uppercase tracking-wider text-purple-200 hover:text-white transition">
+                ⚡ Probar Combo Híbrido en el Carrito
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CATÁLOGO DE PRODUCTOS Y SERVICIOS ==================== -->
+  <section id="catalogo" class="py-16 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-[0.22em] text-cyan-400">Tienda Virtual</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-1">Catálogo de Productos y Servicios</h2>
+          <p class="text-sm text-slate-400 mt-2 max-w-2xl">
+            Filtra por categoría o busca directamente. Haz clic en <strong>Ver detalles</strong> para revisar coberturas, SKU y beneficios cruzados.
+          </p>
+        </div>
+
+        <!-- Buscador -->
+        <div class="relative w-full md:w-80">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z"/></svg>
+          <input id="search-input" type="text" oninput="renderCatalog()" placeholder="Buscar seguro, GPS, alimento..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-panel border border-purple-500/35 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition" />
+        </div>
+      </div>
+
+      <!-- Categorías -->
+      <div id="category-filters" class="flex flex-wrap gap-2.5 mb-8">
+        <!-- Generado dinámicamente por JS -->
+      </div>
+
+      <!-- Grid del Catálogo -->
+      <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Generado dinámicamente por JS -->
+      </div>
+
+      <div id="empty-catalog" class="hidden text-center py-14 neon-card rounded-2xl">
+        <p id="empty-catalog-text" class="text-slate-300 font-semibold">No se encontraron productos con ese criterio.</p>
+        <button type="button" onclick="resetFilters()" class="mt-3 text-sm text-cyan-400 hover:underline">Restablecer filtros</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== RECORRIDO DEL PROCESO DE COMPRA ==================== -->
+  <section id="flujo-compra" class="py-16 border-y border-purple-500/20 bg-panel/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono uppercase tracking-[0.22em] text-purple-400">Customer Journey Digital</span>
+        <h2 class="font-display text-3xl font-bold text-white mt-1">Proceso de Compra en 6 Pasos</h2>
+        <p class="text-sm text-slate-400 mt-2">
+          Recorrido completo que experimenta el usuario dentro de la tienda virtual TRIVANT A.L con pasarela de pago simulada.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="neon-card rounded-xl p-4 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-purple-600/25 border border-purple-400 text-purple-300 font-display font-bold text-sm flex items-center justify-center mb-3">1</div>
+          <h3 class="text-xs font-bold text-white">Seleccionar Producto</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Explora catálogo, filtros y detalles técnicos.</p>
+        </div>
+        <div class="neon-card rounded-xl p-4 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-purple-600/25 border border-purple-400 text-purple-300 font-display font-bold text-sm flex items-center justify-center mb-3">2</div>
+          <h3 class="text-xs font-bold text-white">Agregar al Carrito</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Combina pólizas y Petcare para activar 10% OFF.</p>
+        </div>
+        <div class="neon-card rounded-xl p-4 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-display font-bold text-sm flex items-center justify-center mb-3">3</div>
+          <h3 class="text-xs font-bold text-white">Revisar Compra</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Verifica cantidades, descuentos y envío.</p>
+        </div>
+        <div class="neon-card rounded-xl p-4 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-display font-bold text-sm flex items-center justify-center mb-3">4</div>
+          <h3 class="text-xs font-bold text-white">Capturar Datos</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Titular, domicilio y datos de mascota/póliza.</p>
+        </div>
+        <div class="neon-card rounded-xl p-4 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-purple-600/25 border border-purple-400 text-purple-300 font-display font-bold text-sm flex items-center justify-center mb-3">5</div>
+          <h3 class="text-xs font-bold text-white">Forma de Pago</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Tarjeta, SPEI o Wallet digital (simulado).</p>
+        </div>
+        <div class="neon-card rounded-xl p-4 text-center">
+          <div class="w-9 h-9 mx-auto rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-display font-bold text-sm flex items-center justify-center mb-3">6</div>
+          <h3 class="text-xs font-bold text-white">Confirmar Pedido</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Folio único, certificado digital y guía.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MODELO DE NEGOCIO ==================== -->
+  <section id="modelo-negocio" class="py-16 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-12">
+        <span class="text-xs font-mono uppercase tracking-[0.22em] text-cyan-400">Estrategia Comercial</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-1">Modelo de Negocio Híbrido</h2>
+        <p class="text-sm text-slate-400 mt-2">
+          TRIVANT A.L une el ingreso recurrente de los seguros digitales con la compra frecuente del mercado Petcare para maximizar la retención del cliente.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Pregunta 1 -->
+        <div class="neon-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-purple-600/20 border border-purple-400/50 flex items-center justify-center text-purple-300 mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="font-display text-lg font-bold text-white">¿Cómo obtiene ingresos la empresa?</h3>
+            <ul class="mt-4 space-y-2.5 text-sm text-slate-300">
+              <li class="flex gap-2"><span class="text-cyan-400">▸</span><span><strong>Suscripciones Insurtech (MRR):</strong> Primas mensuales recurrentes y comisiones por colocación de seguros de auto, familia y mascota.</span></li>
+              <li class="flex gap-2"><span class="text-cyan-400">▸</span><span><strong>Margen E-Commerce B2C:</strong> Venta directa de alimento premium, farmacia veterinaria y gadgets inteligentes.</span></li>
+              <li class="flex gap-2"><span class="text-cyan-400">▸</span><span><strong>Venta Cruzada (Bundles):</strong> Paquetes híbridos que incrementan el ticket promedio y fidelizan al usuario con 10% de descuento.</span></li>
+            </ul>
+          </div>
+          <div class="mt-5 pt-4 border-t border-purple-500/20 text-xs font-mono text-purple-300">FLUJO MIXTO: RECURRENTE + TRANSACCIONAL</div>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="neon-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center text-cyan-300 mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <h3 class="font-display text-lg font-bold text-white">¿Quién es el cliente?</h3>
+            <ul class="mt-4 space-y-2.5 text-sm text-slate-300">
+              <li class="flex gap-2"><span class="text-purple-400">▸</span><span><strong>Segmento Principal:</strong> Adultos jóvenes y familias modernas de 24 a 48 años en zonas urbanas (nivel socioeconómico C, C+ y A/B).</span></li>
+              <li class="flex gap-2"><span class="text-purple-400">▸</span><span><strong>Perfil Digital (Pet Parents):</strong> Personas que consideran a sus mascotas parte de la familia, compran en línea y evitan trámites burocráticos.</span></li>
+              <li class="flex gap-2"><span class="text-purple-400">▸</span><span><strong>Necesidad Resuelta:</strong> Centralizar seguridad patrimonial, salud familiar y bienestar animal en una sola plataforma transparente.</span></li>
+            </ul>
+          </div>
+          <div class="mt-5 pt-4 border-t border-purple-500/20 text-xs font-mono text-cyan-300">PERFIL: FAMILIAS DIGITALES Y TUTORES PET</div>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div class="neon-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-indigo-500/20 border border-indigo-400/50 flex items-center justify-center text-indigo-300 mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+            </div>
+            <h3 class="font-display text-lg font-bold text-white">¿Qué medios digitales utilizará para llegar a él?</h3>
+            <ul class="mt-4 space-y-2.5 text-sm text-slate-300">
+              <li class="flex gap-2"><span class="text-cyan-400">▸</span><span><strong>Redes Sociales &amp; Ads:</strong> Campañas segmentadas en Instagram, TikTok y Meta Ads con videos cortos educativos y testimonios.</span></li>
+              <li class="flex gap-2"><span class="text-cyan-400">▸</span><span><strong>SEO &amp; Google Ads (SEM):</strong> Posicionamiento en búsquedas de alta intención (“seguro para mascotas”, “cotizar seguro auto”).</span></li>
+              <li class="flex gap-2"><span class="text-cyan-400">▸</span><span><strong>Email Marketing &amp; Alianzas:</strong> Recordatorios de vacunas/renovación, WhatsApp Business y colaboración con clínicas veterinarias.</span></li>
+            </ul>
+          </div>
+          <div class="mt-5 pt-4 border-t border-purple-500/20 text-xs font-mono text-indigo-300">ESTRATEGIA OMNICANAL DE ADQUISICIÓN</div>
+        </div>
+      </div>
+
+      <!-- Arquitectura tecnológica del proyecto -->
+      <div class="mt-8 p-5 rounded-2xl bg-slate-950/80 border border-purple-500/25 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="text-xs font-mono uppercase tracking-widest text-purple-300">Arquitectura Tecnológica Proyectada (Ingeniería en Sistemas)</p>
+          <p class="text-xs text-slate-400 mt-1">Prototipo funcional de alta fidelidad diseñado para escalar sobre arquitectura full-stack moderna.</p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs font-mono">
+          <span class="px-3 py-1 rounded-lg bg-cyan-950/60 border border-cyan-500/40 text-cyan-300">React / Tailwind</span>
+          <span class="px-3 py-1 rounded-lg bg-purple-950/60 border border-purple-500/40 text-purple-300">Node.js + Express</span>
+          <span class="px-3 py-1 rounded-lg bg-indigo-950/60 border border-indigo-500/40 text-indigo-300">PostgreSQL (Pólizas/Pagos)</span>
+          <span class="px-3 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300">MongoDB (Catálogo Petcare)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECCIÓN DE CONTACTO ==================== -->
+  <section id="contacto" class="py-16 border-t border-purple-500/20 bg-panel/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-5 space-y-5">
+          <span class="text-xs font-mono uppercase tracking-[0.22em] text-cyan-400">Atención y Asesoría</span>
+          <h2 class="font-display text-3xl font-bold text-white">Contáctanos</h2>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            ¿Necesitas una cotización personalizada de seguro o asesoría sobre nuestros productos Petcare? Envíanos un mensaje y nuestro equipo digital te responderá a la brevedad.
+          </p>
+
+          <div class="space-y-3 pt-2 text-sm">
+            <div class="p-4 rounded-xl bg-void/80 border border-purple-500/25 flex items-center gap-3">
+              <span class="text-cyan-400 font-bold">✉</span>
+              <div>
+                <p class="text-xs text-slate-400">Correo corporativo</p>
+                <p class="font-semibold text-white">contacto@trivantal.com</p>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-void/80 border border-purple-500/25 flex items-center gap-3">
+              <span class="text-purple-400 font-bold">📍</span>
+              <div>
+                <p class="text-xs text-slate-400">Sede Operativa</p>
+                <p class="font-semibold text-white">Ciudad de México &amp; Área Metropolitana · Envío Nacional</p>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-void/80 border border-purple-500/25 flex items-center gap-3">
+              <span class="text-cyan-400 font-bold">👥</span>
+              <div>
+                <p class="text-xs text-slate-400">Equipo Fundador · Proyecto CUDEC</p>
+                <p class="font-semibold text-white">Amaya Mayte Bañuelos Villavicencio &amp; Leonardo Martínez Legorreta</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <form id="contact-form" onsubmit="handleContactSubmit(event)" class="neon-card rounded-2xl p-6 sm:p-8 space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label for="c-name" class="block text-xs font-semibold text-slate-300 mb-1.5">Nombre completo *</label>
+                <input id="c-name" type="text" required placeholder="Ej. Sofía Ramírez"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+              <div>
+                <label for="c-email" class="block text-xs font-semibold text-slate-300 mb-1.5">Correo electrónico *</label>
+                <input id="c-email" type="email" required placeholder="nombre@correo.com"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+            </div>
+            <div>
+              <label for="c-topic" class="block text-xs font-semibold text-slate-300 mb-1.5">Motivo de contacto</label>
+              <select id="c-topic" class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400">
+                <option>Cotización de Seguro (Auto / Familia / Mascota)</option>
+                <option>Consulta sobre Productos Petcare</option>
+                <option>Soporte de Póliza o Pedido</option>
+                <option>Alianzas Veterinarias o Corporativas</option>
+              </select>
+            </div>
+            <div>
+              <label for="c-message" class="block text-xs font-semibold text-slate-300 mb-1.5">Mensaje *</label>
+              <textarea id="c-message" rows="4" required placeholder="Cuéntanos cómo podemos proteger a tu familia o mascota..."
+                class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400"></textarea>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+              <p class="text-xs text-slate-400">Respuesta estimada: menos de 2 horas hábiles.</p>
+              <button type="submit" class="neon-btn-primary px-6 py-3 rounded-xl font-bold text-sm text-white">
+                Enviar Mensaje
+              </button>
+            </div>
+            <div id="contact-success" class="hidden p-3.5 rounded-xl bg-emerald-950/70 border border-emerald-400/50 text-emerald-200 text-sm">
+              ✅ ¡Mensaje enviado con éxito! Un asesor de <strong>TRIVANT A.L</strong> se pondrá en contacto contigo muy pronto.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-void border-t border-purple-500/25 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-display font-bold text-white">TRIVANT <span class="text-cyan-400">A.L</span></span>
+        <span>·</span>
+        <span>Comercio Electrónico y Digital · Universidad Multicultural CUDEC</span>
+      </div>
+      <div>
+        Desarrollado por <strong class="text-slate-200">Amaya Mayte Bañuelos Villavicencio</strong> &amp; <strong class="text-slate-200">Leonardo Martínez Legorreta</strong>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL: DETALLE DE PRODUCTO ==================== -->
+  <div id="product-modal" role="dialog" aria-modal="true" aria-label="Detalle del producto" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="neon-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 relative">
+      <button type="button" onclick="closeProductModal()" aria-label="Cerrar detalle de producto" class="absolute top-4 right-4 w-9 h-9 rounded-lg bg-slate-900 border border-purple-500/40 text-slate-300 hover:text-white hover:border-cyan-400 flex items-center justify-center">✕</button>
+      <div id="product-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ==================== DRAWER: CARRITO DE COMPRAS ==================== -->
+  <div id="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras" class="fixed inset-0 z-50 hidden justify-end bg-black/75 backdrop-blur-sm">
+    <div class="w-full max-w-md bg-panel border-l border-purple-500/40 h-full flex flex-col shadow-2xl">
+      <div class="p-5 border-b border-purple-500/25 flex items-center justify-between">
+        <div>
+          <h3 class="font-display text-lg font-bold text-white">Tu Carrito TRIVANT</h3>
+          <p id="cart-subtitle" class="text-xs text-slate-400">0 artículos seleccionados</p>
+        </div>
+        <button type="button" onclick="closeCart()" aria-label="Cerrar carrito" class="w-9 h-9 rounded-lg bg-slate-900 border border-purple-500/40 text-slate-300 hover:text-white">✕</button>
+      </div>
+
+      <!-- Banner Descuento Híbrido -->
+      <div id="cart-hybrid-banner" class="mx-5 mt-4 p-3 rounded-xl text-xs"></div>
+
+      <!-- Lista de items -->
+      <div id="cart-items-list" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+      <!-- Totales y botón Checkout -->
+      <div id="cart-footer" class="p-5 border-t border-purple-500/25 bg-void/90 space-y-3">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: PROCESO DE COMPRA (CHECKOUT) ==================== -->
+  <div id="checkout-modal" role="dialog" aria-modal="true" aria-label="Proceso de compra" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-6">
+    <div id="checkout-modal-panel" class="neon-card rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 relative">
+      <div class="no-print flex items-center justify-between border-b border-purple-500/25 pb-4 mb-6">
+        <div>
+          <span class="text-[11px] font-mono uppercase tracking-widest text-cyan-400">Checkout Seguro Simulado</span>
+          <h3 class="font-display text-xl font-bold text-white">Finalizar Pedido TRIVANT A.L</h3>
+        </div>
+        <button type="button" onclick="closeCheckout()" aria-label="Cerrar checkout" class="w-9 h-9 rounded-lg bg-slate-900 border border-purple-500/40 text-slate-300 hover:text-white">✕</button>
+      </div>
+
+      <!-- Barra visual de 6 pasos -->
+      <div id="checkout-stepper" class="no-print grid grid-cols-6 gap-1.5 sm:gap-2 mb-7"></div>
+
+      <!-- Contenido dinámico del paso actual -->
+      <div id="checkout-step-content"></div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 hidden max-w-sm px-4 py-3 rounded-xl bg-slate-950 border border-cyan-400/70 shadow-[0_0_20px_rgba(6,182,212,0.35)] text-sm text-white flex items-center gap-3">
+    <span class="text-cyan-400 font-bold">✓</span>
+    <span id="toast-text">Producto agregado al carrito</span>
+  </div>
+
+  <!-- ==================== LÓGICA JAVASCRIPT ==================== -->
+  <script>
+    /**
+     * @fileoverview Lógica principal del prototipo e-commerce Insurtech & Petcare TRIVANT A.L.
+     * Incluye catálogo, regla de descuento híbrido (10% OFF + envío gratis), persistencia en
+     * localStorage, navegación móvil accesible, gestión segura de modales y sanitización XSS.
+     */
+
+    /**
+     * @typedef {Object} CatalogItem
+     * @property {number} id - Identificador único numérico del producto/servicio.
+     * @property {string} sku - Código SKU oficial TRIVANT.
+     * @property {string} name - Nombre comercial del producto o póliza.
+     * @property {string} category - Categoría visible ("Seguros" | "Petcare" | "Paquetes Híbridos").
+     * @property {"insurtech"|"petcare"|"hybrid"} vertical - Vertical de negocio para reglas del carrito.
+     * @property {"Mensual"|"Compra única"} billing - Modalidad de cobro.
+     * @property {number} price - Precio unitario en MXN.
+     * @property {string} badge - Etiqueta destacada de la tarjeta.
+     * @property {string} icon - Emoji representativo sin dependencia de activos externos.
+     * @property {string} shortDesc - Resumen para la tarjeta del catálogo.
+     * @property {string} fullDesc - Descripción completa para el modal de detalles.
+     * @property {string[]} features - Lista de coberturas o especificaciones.
+     * @property {string} hybridTip - Mensaje de venta cruzada.
+     */
+
+    /**
+     * @typedef {CatalogItem & { qty: number }} CartItem
+     */
+
+    /**
+     * @typedef {Object} CartTotals
+     * @property {number} subtotal - Suma bruta de precios por cantidad.
+     * @property {number} discount - Descuento híbrido aplicado (10% si cumple condición).
+     * @property {number} shipping - Costo de envío en MXN (0 o 149).
+     * @property {string} shippingLabel - Etiqueta legible del envío.
+     * @property {number} total - Total final a pagar en MXN.
+     * @property {number} totalItems - Cantidad acumulada de unidades en carrito.
+     * @property {boolean} hasInsurtech - Indica si existe al menos una póliza o paquete híbrido.
+     * @property {boolean} hasPetcare - Indica si existe al menos un artículo Petcare o paquete híbrido.
+     * @property {boolean} hasPhysicalItems - Indica si el pedido requiere logística física.
+     * @property {boolean} hybridDiscountActive - Indica si aplica el 10% de descuento híbrido.
+     */
+
+    /**
+     * @typedef {Object} CustomerData
+     * @property {string} fullName - Nombre completo del titular.
+     * @property {string} email - Correo electrónico de contacto y entrega digital.
+     * @property {string} phone - Teléfono o WhatsApp.
+     * @property {string} address - Calle, número y colonia.
+     * @property {string} city - Ciudad y estado.
+     * @property {string} zip - Código postal.
+     * @property {string} petOrPlate - Referencia opcional de mascota o vehículo.
+     */
+
+    /**
+     * @typedef {Object} OrderRecord
+     * @property {string} folio - Folio único del pedido (TRV-2026-XXXX).
+     * @property {string} date - Fecha y hora formateada de confirmación.
+     * @property {CustomerData} customer - Copia de los datos capturados del titular.
+     * @property {"card"|"spei"|"wallet"} payment - Método de pago simulado seleccionado.
+     * @property {CartItem[]} items - Artículos incluidos en la orden.
+     * @property {CartTotals} totals - Desglose financiero calculado al confirmar.
+     * @property {string|null} policyCode - Código de certificado de póliza (POL-AL-XXXX) si aplica.
+     * @property {string|null} trackingCode - Guía de envío (MX-TRV-XXXXXX) si aplica.
+     */
+
+    /** @constant {string} Clave de almacenamiento local para persistir el carrito. */
+    const CART_STORAGE_KEY = "trivant_al_cart_v1";
+
+    /** @constant {CatalogItem[]} Catálogo oficial TRIVANT A.L (8 productos y servicios). */
+    const CATALOG = [
+      {
+        id: 1,
+        sku: "TRV-SEG-01",
+        name: "Seguro Automotriz TRIVANT_AUTO",
+        category: "Seguros",
+        vertical: "insurtech",
+        billing: "Mensual",
+        price: 1250,
+        badge: "Más Popular",
+        icon: "🚗",
+        shortDesc: "Cobertura amplia 100% digital con auxilio vial 24/7 y geolocalización de siniestros.",
+        fullDesc: "Protección automotriz inteligente diseñada para conductores urbanos. Cotiza, emite tu póliza en 60 segundos y reporta percances desde la plataforma sin llamadas interminables.",
+        features: [
+          "Daños materiales, robo total y responsabilidad civil hasta $3M MXN",
+          "Grúa ilimitada, paso de corriente y cerrajero 24/7",
+          "Auto sustituto por hasta 15 días en caso de pérdida total",
+          "Emisión digital inmediata con certificado PDF y QR"
+        ],
+        hybridTip: "Combínalo con cualquier producto Petcare y obtén 10% de descuento total + envío gratis."
+      },
+      {
+        id: 2,
+        sku: "TRV-SEG-02",
+        name: "Seguro Gastos Médicos Familiares",
+        category: "Seguros",
+        vertical: "insurtech",
+        billing: "Mensual",
+        price: 1890,
+        badge: "Protección Integral",
+        icon: "🛡️",
+        shortDesc: "Red hospitalaria nacional, telemedicina 24/7 y reembolso ágil para toda la familia.",
+        fullDesc: "Respaldo médico preventivo y hospitalario para ti y tus seres queridos. Gestiona autorizaciones, consultas médicas en línea y seguimiento de siniestros desde tu perfil.",
+        features: [
+          "Consultas de telemedicina general y pediátrica ilimitadas",
+          "Acceso a más de 450 hospitales y clínicas afiliadas en México",
+          "Check-up anual preventivo y descuentos en laboratorios",
+          "Deducible flexible y reembolso digital en 72 horas"
+        ],
+        hybridTip: "Al sumarlo con Petcare activas envío sin costo en todos tus pedidos físicos."
+      },
+      {
+        id: 3,
+        sku: "TRV-SEG-03",
+        name: "Seguro Veterinario PetShield",
+        category: "Seguros",
+        vertical: "insurtech",
+        billing: "Mensual",
+        price: 480,
+        badge: "Favorito Pet Parents",
+        icon: "🐾",
+        shortDesc: "Urgencias veterinarias, cirugías, vacunas anuales y orientación veterinaria 24/7.",
+        fullDesc: "Porque las emergencias con tu perro o gato no avisan. PetShield protege su salud con cobertura en clínicas certificadas, gastos médicos por accidente o enfermedad y prevención anual.",
+        features: [
+          "Cobertura en urgencias, hospitalización y cirugías hasta $45,000 MXN/año",
+          "Cuadro de vacunación anual y desparasitación incluidos",
+          "Teleconsulta veterinaria 24/7 para resolver dudas al instante",
+          "Responsabilidad civil por daños a terceros causados por tu mascota"
+        ],
+        hybridTip: "Agrega alimento o botiquín Petcare para desbloquear el 10% de descuento híbrido."
+      },
+      {
+        id: 4,
+        sku: "TRV-PET-01",
+        name: "Alimento Holístico Premium (12 kg)",
+        category: "Petcare",
+        vertical: "petcare",
+        billing: "Compra única",
+        price: 1150,
+        badge: "Nutrición Top",
+        icon: "🥣",
+        shortDesc: "Fórmula libre de granos con salmón, Omega 3 y probióticos para piel y articulaciones.",
+        fullDesc: "Nutrición avanzada formulada con ingredientes naturales de grado humano. Fortalece el sistema inmune, mejora la digestión y mantiene un pelaje brillante en perros adultos.",
+        features: [
+          "32% proteína de salmón y cordero sin harinas de relleno",
+          "Enriquecido con glucosamina, condroitina y Omega 3 & 6",
+          "Probióticos activos para salud gastrointestinal",
+          "Bolsa resellable de 12 kg con envío exprés a domicilio"
+        ],
+        hybridTip: "Acompáñalo con cualquier póliza TRIVANT y recibe 10% OFF en toda tu compra."
+      },
+      {
+        id: 5,
+        sku: "TRV-PET-02",
+        name: "Kit Farmacia & Botiquín Petcare Pro",
+        category: "Petcare",
+        vertical: "petcare",
+        billing: "Compra única",
+        price: 620,
+        badge: "Esencial en Casa",
+        icon: "💊",
+        shortDesc: "Antiparasitario, antiséptico dermatológico, suplemento inmune y manual de urgencias.",
+        fullDesc: "Kit preventivo avalado por médicos veterinarios para atender pequeños cortes, proteger contra parásitos externos e internos y reforzar las defensas de tu mascota en casa o viajes.",
+        features: [
+          "Tableta antiparasitaria masticable de amplio espectro",
+          "Spray antiséptico cicatrizante no irritante + gasas estériles",
+          "Multivitamínico masticable con complejo B y zinc",
+          "Estuche rígido portátil con guía rápida de primeros auxilios"
+        ],
+        hybridTip: "Ideal para combinar con PetShield y activar el beneficio híbrido del 10%."
+      },
+      {
+        id: 6,
+        sku: "TRV-PET-03",
+        name: "Collar Inteligente GPS + Monitor Vital",
+        category: "Petcare",
+        vertical: "petcare",
+        billing: "Compra única",
+        price: 1490,
+        badge: "Tech Petcare",
+        icon: "📡",
+        shortDesc: "Rastreo satelital en tiempo real, geocercas de seguridad y monitoreo de actividad.",
+        fullDesc: "Tecnología wearable resistente al agua (IP67) que te permite ubicar a tu mascota desde el celular con precisión GPS, recibir alertas si sale de casa y monitorear su descanso diario.",
+        features: [
+          "Localización GPS en tiempo real con cobertura nacional",
+          "Geocercas configurables con notificación instantánea",
+          "Registro de pasos, calorías y patrones de sueño",
+          "Batería recargable de hasta 14 días y luz LED nocturna"
+        ],
+        hybridTip: "Súmalo junto a tu seguro para disfrutar 10% de descuento y envío gratis."
+      },
+      {
+        id: 7,
+        sku: "TRV-HYB-01",
+        name: "Plan Híbrido Familia + Mascota 360",
+        category: "Paquetes Híbridos",
+        vertical: "hybrid",
+        billing: "Mensual",
+        price: 2190,
+        badge: "Ahorro 360°",
+        icon: "⚡",
+        shortDesc: "Une Seguro Médico Familiar + PetShield + envío mensual de kit preventivo Petcare.",
+        fullDesc: "Nuestra solución insignia que materializa la propuesta de TRIVANT A.L: salud familiar, cobertura veterinaria integral y reabastecimiento mensual de cuidado básico en una sola suscripción.",
+        features: [
+          "Incluye póliza de Gastos Médicos Familiares + PetShield",
+          "Envío mensual sin costo de suplementos e higiene Petcare",
+          "Gestor único de pólizas y pedidos desde un solo panel",
+          "Tarifa preferencial integrada con prioridad en soporte 24/7"
+        ],
+        hybridTip: "Al incluir ambas verticales, activa beneficios preferenciales automáticamente."
+      },
+      {
+        id: 8,
+        sku: "TRV-HYB-02",
+        name: "Pack Protección Total Vial & Pet",
+        category: "Paquetes Híbridos",
+        vertical: "hybrid",
+        billing: "Mensual",
+        price: 1580,
+        badge: "Viaja Seguro",
+        icon: "🚘",
+        shortDesc: "TRIVANT_AUTO + cobertura veterinaria a bordo + arnés certificado y botiquín vial.",
+        fullDesc: "Pensado para quienes viajan siempre con su compañero de cuatro patas. Protege tu vehículo con cobertura amplia, asegura atención médica para tu mascota en trayectos e incluye kit físico de viaje.",
+        features: [
+          "Póliza TRIVANT_AUTO cobertura amplia + asistencia en carretera",
+          "Extensión de gastos veterinarios por percance vehicular",
+          "Kit físico incluido: arnés con anclaje ISOFIX + bebedero portátil",
+          "Envío gratuito del kit a tu domicilio al confirmar suscripción"
+        ],
+        hybridTip: "Combina seguro digital y equipamiento físico en un solo clic."
+      }
+    ];
+
+    /** @constant {string[]} Categorías disponibles para el filtro del catálogo. */
+    const CATEGORIES = ["Todos", "Seguros", "Petcare", "Paquetes Híbridos"];
+
+    // ==================== ESTADO DE LA APLICACIÓN ====================
+    /** @type {string} Categoría activa del catálogo. */
+    let activeCategory = "Todos";
+    /** @type {CartItem[]} Artículos actualmente en el carrito. */
+    let cart = [];
+    /** @type {number} Paso actual dentro del modal de checkout (3 a 6). */
+    let checkoutStep = 3;
+    /** @type {"card"|"spei"|"wallet"} Método de pago simulado seleccionado. */
+    let selectedPayment = "card";
+    /** @type {CustomerData} Datos del cliente capturados en el Paso 4. */
+    let customerData = {
+      fullName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      zip: "",
+      petOrPlate: ""
+    };
+    /** @type {OrderRecord|null} Última orden confirmada para el comprobante del Paso 6. */
+    let lastOrder = null;
+    /** @type {number|null} Identificador de temporizador del toast. */
+    let toastTimer = null;
+
+    // ==================== UTILIDADES DE SEGURIDAD, FORMATO Y STORAGE ====================
+
+    /**
+     * Escapa caracteres especiales HTML para prevenir inyección XSS y rotura de atributos
+     * al interpolar datos provenientes del usuario dentro de plantillas `innerHTML`.
+     * @param {unknown} str - Valor a sanitizar.
+     * @returns {string} Cadena segura para HTML y atributos entre comillas.
+     */
+    function escapeHTML(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    /**
+     * Formatea una cantidad numérica como moneda mexicana (MXN).
+     * @param {number} amount - Monto numérico.
+     * @returns {string} Cadena formateada, ej. "$1,250.00 MXN".
+     */
+    function formatMXN(amount) {
+      return "$" + Number(amount).toLocaleString("es-MX", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + " MXN";
+    }
+
+    /**
+     * Persiste el estado actual del carrito en `localStorage` guardando solo `id` y `qty`.
+     * Envuelto en `try/catch` para tolerar navegadores con almacenamiento restringido.
+     * @returns {void}
+     */
+    function saveCartToStorage() {
+      try {
+        const minimalCart = cart.map(item => ({ id: item.id, qty: item.qty }));
+        window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(minimalCart));
+      } catch (err) {
+        console.warn("No se pudo guardar el carrito en localStorage:", err);
+      }
+    }
+
+    /**
+     * Restaura y valida el carrito desde `localStorage`.
+     * Verifica que cada elemento exista en `CATALOG` y tenga una cantidad entera positiva
+     * para evitar datos corruptos o precios alterados.
+     * @returns {CartItem[]} Arreglo validado de artículos del carrito.
+     */
+    function loadCartFromStorage() {
+      try {
+        const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+        if (!raw) return [];
+
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+
+        const validItems = [];
+        const seenIds = new Set();
+
+        for (const entry of parsed) {
+          if (!entry || typeof entry !== "object") continue;
+          const id = Number(entry.id);
+          const qty = Number(entry.qty);
+
+          if (!Number.isInteger(id) || !Number.isInteger(qty) || qty <= 0) continue;
+          if (seenIds.has(id)) continue;
+
+          const catalogProduct = CATALOG.find(p => p.id === id);
+          if (!catalogProduct) continue;
+
+          seenIds.add(id);
+          validItems.push({ ...catalogProduct, qty });
+        }
+
+        return validItems;
+      } catch (err) {
+        console.warn("No se pudo cargar el carrito desde localStorage:", err);
+        return [];
+      }
+    }
+
+    /**
+     * Muestra una notificación temporal (Toast) en la esquina inferior derecha.
+     * @param {string} msg - Mensaje informativo a mostrar.
+     * @returns {void}
+     */
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toast-text").textContent = msg;
+      toast.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add("hidden"), 2800);
+    }
+
+    // ==================== PARCHE 2: MENÚ MÓVIL ACCESIBLE ====================
+
+    /**
+     * Alterna la visibilidad del menú de navegación móvil y sincroniza atributos ARIA.
+     * @returns {void}
+     */
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobile-menu");
+      const btn = document.getElementById("mobile-menu-btn");
+      const iconOpen = document.getElementById("mobile-menu-icon-open");
+      const iconClose = document.getElementById("mobile-menu-icon-close");
+
+      const isOpening = menu.classList.contains("hidden");
+      menu.classList.toggle("hidden", !isOpening);
+      btn.setAttribute("aria-expanded", String(isOpening));
+      btn.setAttribute("aria-label", isOpening ? "Cerrar menú" : "Abrir menú");
+      iconOpen.classList.toggle("hidden", isOpening);
+      iconClose.classList.toggle("hidden", !isOpening);
+    }
+
+    /**
+     * Cierra el menú móvil y restablece el estado ARIA del botón hamburguesa.
+     * @returns {void}
+     */
+    function closeMobileMenu() {
+      const menu = document.getElementById("mobile-menu");
+      const btn = document.getElementById("mobile-menu-btn");
+      const iconOpen = document.getElementById("mobile-menu-icon-open");
+      const iconClose = document.getElementById("mobile-menu-icon-close");
+
+      if (!menu || menu.classList.contains("hidden")) return;
+      menu.classList.add("hidden");
+      btn.setAttribute("aria-expanded", "false");
+      btn.setAttribute("aria-label", "Abrir menú");
+      iconOpen.classList.remove("hidden");
+      iconClose.classList.add("hidden");
+    }
+
+    // ==================== PARCHE 4: BLOQUEO DE SCROLL Y CIERRE DE MODALES ====================
+
+    /**
+     * Sincroniza el bloqueo de scroll del `body` dependiendo de si existe algún
+     * modal o drawer abierto actualmente.
+     * @returns {void}
+     */
+    function syncBodyScrollLock() {
+      const modalIds = ["product-modal", "cart-drawer", "checkout-modal"];
+      const anyOpen = modalIds.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains("hidden");
+      });
+      document.body.classList.toggle("overflow-hidden", anyOpen);
+    }
+
+    /**
+     * Registra listeners globales para cerrar modales/drawers con la tecla `Escape`,
+     * haciendo clic en el fondo oscuro (backdrop), y cerrar el menú móvil al cambiar a escritorio.
+     * @returns {void}
+     */
+    function initGlobalOverlayUX() {
+      const backdropMap = [
+        { id: "product-modal", closeFn: closeProductModal },
+        { id: "cart-drawer", closeFn: closeCart },
+        { id: "checkout-modal", closeFn: closeCheckout }
+      ];
+
+      backdropMap.forEach(({ id, closeFn }) => {
+        const overlay = document.getElementById(id);
+        if (!overlay) return;
+        overlay.addEventListener("click", (event) => {
+          if (event.target === overlay) {
+            closeFn();
+          }
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+
+        if (!document.getElementById("checkout-modal").classList.contains("hidden")) {
+          closeCheckout();
+        } else if (!document.getElementById("cart-drawer").classList.contains("hidden")) {
+          closeCart();
+        } else if (!document.getElementById("product-modal").classList.contains("hidden")) {
+          closeProductModal();
+        } else {
+          closeMobileMenu();
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768) {
+          closeMobileMenu();
+        }
+      });
+    }
+
+    // ==================== REGLA DE NEGOCIO HÍBRIDA Y TOTALES ====================
+
+    /**
+     * Calcula subtotal, descuento híbrido del 10%, costo de envío y total final del carrito.
+     * Regla TRIVANT A.L:
+     * - 10% OFF automático al combinar al menos 1 Seguro + 1 Producto Petcare (o Paquete Híbrido).
+     * - Envío gratis si solo hay pólizas digitales, si incluye seguro, o si los físicos >= $1,000 MXN; de lo contrario $149 MXN.
+     * @returns {CartTotals} Desglose completo del carrito.
+     */
+    function calculateCartTotals() {
+      const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+      const hasInsurtech = cart.some(i => i.vertical === "insurtech" || i.vertical === "hybrid");
+      const hasPetcare = cart.some(i => i.vertical === "petcare" || i.vertical === "hybrid");
+      const hasPhysicalItems = cart.some(i => i.vertical === "petcare" || i.vertical === "hybrid");
+      const physicalSubtotal = cart
+        .filter(i => i.vertical === "petcare" || i.vertical === "hybrid")
+        .reduce((acc, i) => acc + i.price * i.qty, 0);
+
+      const hybridDiscountActive = hasInsurtech && hasPetcare;
+      const discount = hybridDiscountActive ? subtotal * 0.10 : 0;
+
+      let shipping = 0;
+      let shippingLabel = "Gratis (Entrega Digital)";
+      if (hasPhysicalItems) {
+        if (hasInsurtech || physicalSubtotal >= 1000) {
+          shipping = 0;
+          shippingLabel = "Gratis (Beneficio TRIVANT)";
+        } else {
+          shipping = 149;
+          shippingLabel = formatMXN(149);
+        }
+      }
+
+      const total = Math.max(0, subtotal - discount + shipping);
+      const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+
+      return {
+        subtotal,
+        discount,
+        shipping,
+        shippingLabel,
+        total,
+        totalItems,
+        hasInsurtech,
+        hasPetcare,
+        hasPhysicalItems,
+        hybridDiscountActive
+      };
+    }
+
+    // ==================== RENDERIZADO DE FILTROS Y CATÁLOGO ====================
+
+    /**
+     * Renderiza los botones de filtro por categoría con su contador dinámico.
+     * @returns {void}
+     */
+    function renderCategoryFilters() {
+      const container = document.getElementById("category-filters");
+      container.innerHTML = CATEGORIES.map(cat => {
+        const count = cat === "Todos" ? CATALOG.length : CATALOG.filter(p => p.category === cat).length;
+        const isActive = activeCategory === cat;
+        return `
+          <button type="button" onclick="setCategory('${cat}')"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition flex items-center gap-2 ${
+              isActive
+                ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white border-cyan-300 shadow-[0_0_16px_rgba(6,182,212,0.35)]'
+                : 'bg-panel text-slate-300 border-purple-500/30 hover:border-cyan-400 hover:text-white'
+            }">
+            <span>${cat}</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[11px] ${isActive ? 'bg-black/25 text-white' : 'bg-purple-950 text-purple-300'}">${count}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    /**
+     * Actualiza la categoría activa y vuelve a renderizar filtros y catálogo.
+     * @param {string} cat - Nombre de la categoría seleccionada.
+     * @returns {void}
+     */
+    function setCategory(cat) {
+      activeCategory = cat;
+      renderCategoryFilters();
+      renderCatalog();
+    }
+
+    /**
+     * Restablece la categoría a "Todos" y limpia el campo de búsqueda.
+     * @returns {void}
+     */
+    function resetFilters() {
+      activeCategory = "Todos";
+      document.getElementById("search-input").value = "";
+      renderCategoryFilters();
+      renderCatalog();
+    }
+
+    /**
+     * Filtra y renderiza las tarjetas de productos y servicios en el catálogo.
+     * @returns {void}
+     */
+    function renderCatalog() {
+      const rawQuery = document.getElementById("search-input").value.trim();
+      const query = rawQuery.toLowerCase();
+      const filtered = CATALOG.filter(p => {
+        const matchCat = activeCategory === "Todos" || p.category === activeCategory;
+        const matchQuery = !query ||
+          p.name.toLowerCase().includes(query) ||
+          p.shortDesc.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query) ||
+          p.sku.toLowerCase().includes(query);
+        return matchCat && matchQuery;
+      });
+
+      const grid = document.getElementById("catalog-grid");
+      const empty = document.getElementById("empty-catalog");
+      const emptyText = document.getElementById("empty-catalog-text");
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "";
+        emptyText.innerHTML = rawQuery
+          ? `No se encontraron productos para "<span class="text-cyan-300">${escapeHTML(rawQuery)}</span>".`
+          : "No se encontraron productos con ese criterio.";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      grid.innerHTML = filtered.map(p => {
+        const badgeColor = p.vertical === "insurtech"
+          ? "bg-purple-950/90 text-purple-300 border-purple-400/50"
+          : p.vertical === "petcare"
+            ? "bg-cyan-950/90 text-cyan-300 border-cyan-400/50"
+            : "bg-indigo-950/90 text-emerald-300 border-emerald-400/50";
+
+        return `
+          <article class="neon-card rounded-2xl p-5 flex flex-col justify-between h-full">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-4">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeColor}">${p.category}</span>
+                <span class="text-[11px] font-mono text-slate-400">${p.sku}</span>
+              </div>
+
+              <div class="w-14 h-14 rounded-2xl bg-slate-950 border border-purple-500/35 flex items-center justify-center text-3xl mb-4 shadow-inner">
+                ${p.icon}
+              </div>
+
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-cyan-400 mb-1">${p.badge}</div>
+              <h3 class="font-display text-base font-bold text-white leading-snug">${p.name}</h3>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed">${p.shortDesc}</p>
+            </div>
+
+            <div class="mt-5 pt-4 border-t border-purple-500/20">
+              <div class="flex items-baseline justify-between mb-3">
+                <div>
+                  <span class="font-display text-xl font-bold text-white">$${p.price.toLocaleString("es-MX")}</span>
+                  <span class="text-[11px] text-slate-400"> MXN${p.billing === "Mensual" ? "/mes" : ""}</span>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">${p.billing}</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="openProductModal(${p.id})"
+                  class="py-2 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-purple-500/40 text-xs font-semibold text-slate-200 transition">
+                  Ver Detalles
+                </button>
+                <button type="button" onclick="addToCart(${p.id})"
+                  class="neon-btn-primary py-2 px-2.5 rounded-xl text-xs font-bold text-white">
+                  + Agregar
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    // ==================== MODAL DE DETALLES DEL PRODUCTO ====================
+
+    /**
+     * Abre el modal con las especificaciones completas de un producto o póliza.
+     * @param {number} id - ID del producto en `CATALOG`.
+     * @returns {void}
+     */
+    function openProductModal(id) {
+      const p = CATALOG.find(item => item.id === id);
+      if (!p) return;
+
+      closeMobileMenu();
+      const body = document.getElementById("product-modal-body");
+      body.innerHTML = `
+        <div class="flex items-start gap-4 pr-8">
+          <div class="w-16 h-16 rounded-2xl bg-void border border-cyan-400/40 flex items-center justify-center text-4xl shrink-0">${p.icon}</div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-purple-950 border border-purple-400/50 text-purple-300 text-xs font-bold">${p.category}</span>
+              <span class="text-xs font-mono text-slate-400">SKU: ${p.sku}</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40">${p.billing}</span>
+            </div>
+            <h3 class="font-display text-xl sm:text-2xl font-bold text-white mt-2">${p.name}</h3>
+          </div>
+        </div>
+
+        <p class="text-sm text-slate-300 mt-5 leading-relaxed">${p.fullDesc}</p>
+
+        <div class="mt-5 p-4 rounded-xl bg-void/90 border border-purple-500/25">
+          <h4 class="text-xs font-mono uppercase tracking-wider text-cyan-400 mb-3">Incluye / Especificaciones</h4>
+          <ul class="space-y-2 text-sm text-slate-200">
+            ${p.features.map(f => `<li class="flex items-start gap-2"><span class="text-emerald-400 mt-0.5">✓</span><span>${f}</span></li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="mt-4 p-3.5 rounded-xl bg-gradient-to-r from-purple-950/80 to-cyan-950/60 border border-cyan-400/40 text-xs text-cyan-100">
+          <strong>⚡ Beneficio Híbrido TRIVANT:</strong> ${p.hybridTip}
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-purple-500/25 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-xs text-slate-400">Precio (${p.billing})</p>
+            <p class="font-display text-2xl font-bold text-white">${formatMXN(p.price)}${p.billing === "Mensual" ? '<span class="text-xs font-sans font-normal text-slate-400"> /mes</span>' : ''}</p>
+          </div>
+          <div class="flex gap-3">
+            <button type="button" onclick="closeProductModal()" class="px-4 py-2.5 rounded-xl border border-slate-600 text-slate-300 hover:text-white text-sm font-semibold">Cerrar</button>
+            <button type="button" onclick="addToCart(${p.id}); closeProductModal();" class="neon-btn-primary px-6 py-2.5 rounded-xl text-sm font-bold text-white">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+      `;
+
+      const modal = document.getElementById("product-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      syncBodyScrollLock();
+    }
+
+    /**
+     * Cierra el modal de detalle de producto y actualiza el bloqueo de scroll.
+     * @returns {void}
+     */
+    function closeProductModal() {
+      const modal = document.getElementById("product-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      syncBodyScrollLock();
+    }
+
+    // ==================== GESTIÓN DEL CARRITO DE COMPRAS ====================
+
+    /**
+     * Agrega una unidad de un producto al carrito y persiste el cambio en `localStorage`.
+     * @param {number} id - ID del producto en `CATALOG`.
+     * @returns {void}
+     */
+    function addToCart(id) {
+      const product = CATALOG.find(p => p.id === id);
+      if (!product) return;
+
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      saveCartToStorage();
+      updateCartUI();
+      showToast(`"${product.name}" agregado al carrito`);
+    }
+
+    /**
+     * Atajo de demostración: agrega PetShield + Alimento Holístico para activar
+     * el descuento híbrido del 10% y abre el carrito inmediatamente.
+     * @returns {void}
+     */
+    function addDemoCombo() {
+      addToCart(3); // Seguro PetShield
+      addToCart(4); // Alimento Holístico
+      openCart();
+    }
+
+    /**
+     * Modifica la cantidad de un artículo en el carrito y lo elimina si llega a 0.
+     * @param {number} id - ID del producto en el carrito.
+     * @param {number} delta - Incremento (+1) o decremento (-1).
+     * @returns {void}
+     */
+    function changeQty(id, delta) {
+      const idx = cart.findIndex(item => item.id === id);
+      if (idx === -1) return;
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) {
+        cart.splice(idx, 1);
+      }
+      saveCartToStorage();
+      updateCartUI();
+      if (!document.getElementById("checkout-modal").classList.contains("hidden") && checkoutStep === 3) {
+        renderCheckout();
+      }
+    }
+
+    /**
+     * Elimina por completo un artículo del carrito.
+     * @param {number} id - ID del producto a eliminar.
+     * @returns {void}
+     */
+    function removeItem(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveCartToStorage();
+      updateCartUI();
+      if (!document.getElementById("checkout-modal").classList.contains("hidden") && checkoutStep === 3) {
+        renderCheckout();
+      }
+    }
+
+    /**
+     * Actualiza el contador del navbar, el banner híbrido, la lista y los totales del drawer.
+     * @returns {void}
+     */
+    function updateCartUI() {
+      const totals = calculateCartTotals();
+      document.getElementById("nav-cart-badge").textContent = totals.totalItems;
+      document.getElementById("cart-subtitle").textContent = `${totals.totalItems} artículo${totals.totalItems === 1 ? '' : 's'} seleccionado${totals.totalItems === 1 ? '' : 's'}`;
+
+      const banner = document.getElementById("cart-hybrid-banner");
+      if (cart.length === 0) {
+        banner.className = "mx-5 mt-4 p-3 rounded-xl text-xs bg-slate-900/90 border border-purple-500/30 text-slate-300";
+        banner.innerHTML = "💡 Combina <strong>1 Seguro + 1 Producto Petcare</strong> para activar <strong>10% de descuento híbrido</strong> y envío gratis.";
+      } else if (totals.hybridDiscountActive) {
+        banner.className = "mx-5 mt-4 p-3 rounded-xl text-xs bg-emerald-950/70 border border-emerald-400/50 text-emerald-200";
+        banner.innerHTML = `🎉 <strong>¡Descuento Híbrido TRIVANT (10%) activado!</strong> Ahorras ${formatMXN(totals.discount)} + envío gratis.`;
+      } else if (totals.hasInsurtech) {
+        banner.className = "mx-5 mt-4 p-3 rounded-xl text-xs bg-cyan-950/60 border border-cyan-400/40 text-cyan-200";
+        banner.innerHTML = "⚡ Ya tienes un seguro. Agrega <strong>1 artículo Petcare</strong> para desbloquear <strong>10% OFF en todo tu pedido</strong>.";
+      } else {
+        banner.className = "mx-5 mt-4 p-3 rounded-xl text-xs bg-purple-950/70 border border-purple-400/40 text-purple-200";
+        banner.innerHTML = "🛡️ Ya tienes Petcare. Agrega <strong>1 Seguro Insurtech</strong> para desbloquear <strong>10% OFF + envío gratis</strong>.";
+      }
+
+      const list = document.getElementById("cart-items-list");
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 space-y-3">
+            <div class="text-4xl">🛒</div>
+            <p class="text-sm font-semibold text-slate-300">Tu carrito está vacío</p>
+            <p class="text-xs text-slate-500">Agrega una póliza digital o un producto Petcare desde el catálogo.</p>
+            <button type="button" onclick="closeCart()" class="mt-2 px-4 py-2 rounded-xl border border-cyan-400/50 text-xs font-bold text-cyan-300 hover:bg-cyan-950/40">Ir al Catálogo</button>
+          </div>
+        `;
+      } else {
+        list.innerHTML = cart.map(item => `
+          <div class="p-3.5 rounded-xl bg-void/90 border border-purple-500/25 flex gap-3 items-start">
+            <div class="w-11 h-11 rounded-xl bg-slate-900 border border-purple-500/30 flex items-center justify-center text-2xl shrink-0">${item.icon}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between gap-2">
+                <h4 class="text-xs font-bold text-white leading-snug">${item.name}</h4>
+                <button type="button" onclick="removeItem(${item.id})" class="text-slate-500 hover:text-rose-400 text-xs" title="Eliminar" aria-label="Eliminar ${escapeHTML(item.name)}">✕</button>
+              </div>
+              <p class="text-[11px] text-cyan-400 mt-0.5">${item.category} · ${item.billing}</p>
+              <div class="flex items-center justify-between mt-2.5">
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="changeQty(${item.id}, -1)" class="w-6 h-6 rounded-md bg-slate-800 hover:bg-purple-800 text-white text-xs font-bold" aria-label="Disminuir cantidad">−</button>
+                  <span class="text-xs font-mono w-5 text-center">${item.qty}</span>
+                  <button type="button" onclick="changeQty(${item.id}, 1)" class="w-6 h-6 rounded-md bg-slate-800 hover:bg-purple-800 text-white text-xs font-bold" aria-label="Aumentar cantidad">+</button>
+                </div>
+                <span class="text-xs font-bold text-white">${formatMXN(item.price * item.qty)}</span>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      const footer = document.getElementById("cart-footer");
+      footer.innerHTML = `
+        <div class="space-y-1.5 text-xs">
+          <div class="flex justify-between text-slate-400">
+            <span>Subtotal</span>
+            <span>${formatMXN(totals.subtotal)}</span>
+          </div>
+          ${totals.hybridDiscountActive ? `
+            <div class="flex justify-between text-emerald-400 font-semibold">
+              <span>Descuento Híbrido (10%)</span>
+              <span>−${formatMXN(totals.discount)}</span>
+            </div>
+          ` : ''}
+          <div class="flex justify-between text-slate-400">
+            <span>Envío</span>
+            <span class="${totals.shipping === 0 ? 'text-cyan-400 font-semibold' : ''}">${totals.shippingLabel}</span>
+          </div>
+          <div class="flex justify-between text-base font-bold text-white pt-2 border-t border-purple-500/25">
+            <span>Total</span>
+            <span class="font-display text-cyan-300">${formatMXN(totals.total)}</span>
+          </div>
+        </div>
+        <button type="button" onclick="startCheckout()" ${cart.length === 0 ? 'disabled' : ''}
+          class="w-full py-3 rounded-xl font-bold text-sm text-white ${cart.length === 0 ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'neon-btn-primary'}">
+          Proceder al Proceso de Compra →
+        </button>
+      `;
+    }
+
+    /**
+     * Abre el drawer lateral del carrito y bloquea el scroll del fondo.
+     * @returns {void}
+     */
+    function openCart() {
+      closeMobileMenu();
+      updateCartUI();
+      const drawer = document.getElementById("cart-drawer");
+      drawer.classList.remove("hidden");
+      drawer.classList.add("flex");
+      syncBodyScrollLock();
+    }
+
+    /**
+     * Cierra el drawer lateral del carrito y libera el scroll si no hay otros modales.
+     * @returns {void}
+     */
+    function closeCart() {
+      const drawer = document.getElementById("cart-drawer");
+      drawer.classList.add("hidden");
+      drawer.classList.remove("flex");
+      syncBodyScrollLock();
+    }
+
+    // ==================== PROCESO DE COMPRA (CHECKOUT EN 6 PASOS) ====================
+
+    /**
+     * Inicia el flujo de checkout desde el Paso 3 (Revisar Compra).
+     * @returns {void}
+     */
+    function startCheckout() {
+      if (cart.length === 0) return;
+      closeCart();
+      checkoutStep = 3;
+      renderCheckout();
+      const modal = document.getElementById("checkout-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      syncBodyScrollLock();
+    }
+
+    /**
+     * Cierra el modal de checkout y restablece el scroll de la página.
+     * @returns {void}
+     */
+    function closeCheckout() {
+      const modal = document.getElementById("checkout-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      syncBodyScrollLock();
+    }
+
+    /**
+     * Renderiza la barra visual de progreso de los 6 pasos del proceso de compra.
+     * @returns {void}
+     */
+    function renderStepper() {
+      const steps = [
+        { num: 1, label: "Producto" },
+        { num: 2, label: "Carrito" },
+        { num: 3, label: "Revisar" },
+        { num: 4, label: "Datos" },
+        { num: 5, label: "Pago" },
+        { num: 6, label: "Confirmado" }
+      ];
+
+      document.getElementById("checkout-stepper").innerHTML = steps.map(s => {
+        const done = s.num < checkoutStep;
+        const current = s.num === checkoutStep;
+        const cls = done
+          ? "bg-emerald-500/20 border-emerald-400 text-emerald-300"
+          : current
+            ? "bg-gradient-to-r from-purple-600 to-cyan-600 border-cyan-300 text-white shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+            : "bg-void border-slate-700 text-slate-500";
+        return `
+          <div class="rounded-xl border p-2 text-center ${cls}">
+            <div class="font-display text-xs font-bold">${done ? '✓' : s.num}</div>
+            <div class="text-[10px] font-semibold truncate mt-0.5">${s.label}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    /**
+     * Renderiza la vista correspondiente al paso activo del checkout (Pasos 3 a 6),
+     * sanitizando todos los valores ingresados por el usuario con `escapeHTML`.
+     * @returns {void}
+     */
+    function renderCheckout() {
+      renderStepper();
+      const container = document.getElementById("checkout-step-content");
+      const totals = calculateCartTotals();
+
+      // PASO 3: REVISAR COMPRA
+      if (checkoutStep === 3) {
+        if (cart.length === 0) {
+          container.innerHTML = `<div class="text-center py-8"><p class="text-slate-300">No hay productos en tu pedido.</p><button type="button" onclick="closeCheckout()" class="mt-4 neon-btn-primary px-5 py-2 rounded-xl text-sm font-bold text-white">Volver a la tienda</button></div>`;
+          return;
+        }
+        container.innerHTML = `
+          <h4 class="font-display text-lg font-bold text-white mb-1">Paso 3: Revisar tu Compra</h4>
+          <p class="text-xs text-slate-400 mb-4">Confirma los productos, pólizas y beneficios aplicados antes de capturar tus datos.</p>
+
+          <div class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+            ${cart.map(item => `
+              <div class="p-3 rounded-xl bg-void border border-purple-500/25 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">${item.icon}</span>
+                  <div>
+                    <p class="text-sm font-bold text-white">${item.name}</p>
+                    <p class="text-xs text-slate-400">${item.sku} · ${item.category} · Cant: ${item.qty}</p>
+                  </div>
+                </div>
+                <span class="text-sm font-bold text-cyan-300">${formatMXN(item.price * item.qty)}</span>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="mt-5 p-4 rounded-xl bg-slate-950 border border-purple-500/30 space-y-1.5 text-sm">
+            <div class="flex justify-between text-slate-400"><span>Subtotal</span><span>${formatMXN(totals.subtotal)}</span></div>
+            ${totals.hybridDiscountActive ? `<div class="flex justify-between text-emerald-400 font-semibold"><span>Descuento Híbrido TRIVANT (10%)</span><span>−${formatMXN(totals.discount)}</span></div>` : ''}
+            <div class="flex justify-between text-slate-400"><span>Envío / Entrega</span><span class="text-cyan-300">${totals.shippingLabel}</span></div>
+            <div class="flex justify-between text-base font-bold text-white pt-2 border-t border-purple-500/25">
+              <span>Total a Pagar (IVA incluido)</span>
+              <span class="font-display text-cyan-300">${formatMXN(totals.total)}</span>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-between gap-3">
+            <button type="button" onclick="closeCheckout(); openCart();" class="px-4 py-2.5 rounded-xl border border-slate-600 text-sm text-slate-300 hover:text-white">← Editar Carrito</button>
+            <button type="button" onclick="checkoutStep = 4; renderCheckout();" class="neon-btn-primary px-6 py-2.5 rounded-xl text-sm font-bold text-white">Continuar a Datos →</button>
+          </div>
+        `;
+      }
+
+      // PASO 4: CAPTURAR DATOS (atributos escapados contra XSS/comillas)
+      else if (checkoutStep === 4) {
+        container.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h4 class="font-display text-lg font-bold text-white">Paso 4: Capturar Datos del Cliente</h4>
+              <p class="text-xs text-slate-400">Información para emisión de póliza digital y/o envío de productos Petcare.</p>
+            </div>
+            <button type="button" onclick="autofillDemoCustomer()" class="px-3 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-400/50 text-cyan-300 hover:bg-cyan-900/60 text-xs font-bold">
+              ⚡ Autocompletar Datos de Prueba
+            </button>
+          </div>
+
+          <form id="customer-form" onsubmit="saveCustomerAndNext(event)" class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-3.5">
+              <div>
+                <label for="f-name" class="block text-xs font-semibold text-slate-300 mb-1">Nombre completo del titular *</label>
+                <input id="f-name" type="text" required value="${escapeHTML(customerData.fullName)}" placeholder="Nombre y apellidos"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+              <div>
+                <label for="f-email" class="block text-xs font-semibold text-slate-300 mb-1">Correo electrónico *</label>
+                <input id="f-email" type="email" required value="${escapeHTML(customerData.email)}" placeholder="cliente@correo.com"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+              <div>
+                <label for="f-phone" class="block text-xs font-semibold text-slate-300 mb-1">Teléfono / WhatsApp *</label>
+                <input id="f-phone" type="tel" required value="${escapeHTML(customerData.phone)}" placeholder="55 1234 5678"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+              <div>
+                <label for="f-ref" class="block text-xs font-semibold text-slate-300 mb-1">Nombre de mascota / Modelo de auto (opcional)</label>
+                <input id="f-ref" type="text" value="${escapeHTML(customerData.petOrPlate)}" placeholder="Ej. Max (Golden Retriever) / Mazda 3"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-3 gap-3.5">
+              <div class="sm:col-span-2">
+                <label for="f-address" class="block text-xs font-semibold text-slate-300 mb-1">Calle, número y colonia *</label>
+                <input id="f-address" type="text" required value="${escapeHTML(customerData.address)}" placeholder="Av. Reforma 222, Col. Juárez"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+              <div>
+                <label for="f-zip" class="block text-xs font-semibold text-slate-300 mb-1">Código Postal *</label>
+                <input id="f-zip" type="text" required value="${escapeHTML(customerData.zip)}" placeholder="06600"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+              </div>
+            </div>
+
+            <div>
+              <label for="f-city" class="block text-xs font-semibold text-slate-300 mb-1">Ciudad / Estado *</label>
+              <input id="f-city" type="text" required value="${escapeHTML(customerData.city)}" placeholder="Ciudad de México, CDMX"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-void border border-purple-500/35 text-sm text-white focus:outline-none focus:border-cyan-400" />
+            </div>
+
+            <div class="pt-3 flex justify-between gap-3">
+              <button type="button" onclick="checkoutStep = 3; renderCheckout();" class="px-4 py-2.5 rounded-xl border border-slate-600 text-sm text-slate-300 hover:text-white">← Revisar Compra</button>
+              <button type="submit" class="neon-btn-primary px-6 py-2.5 rounded-xl text-sm font-bold text-white">Continuar a Pago →</button>
+            </div>
+          </form>
+        `;
+      }
+
+      // PASO 5: SELECCIONAR FORMA DE PAGO (SIMULADO)
+      else if (checkoutStep === 5) {
+        container.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h4 class="font-display text-lg font-bold text-white">Paso 5: Seleccionar Forma de Pago</h4>
+              <p class="text-xs text-slate-400">Monto total: <strong class="text-cyan-300">${formatMXN(totals.total)}</strong></p>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-[11px] font-bold">
+              🔒 Pago Simulado — Sin cargos reales
+            </span>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-3 mb-5">
+            <button type="button" onclick="selectPaymentMethod('card')" class="p-3.5 rounded-xl border text-left transition ${selectedPayment === 'card' ? 'bg-purple-950/80 border-cyan-400 shadow-[0_0_14px_rgba(6,182,212,0.3)]' : 'bg-void border-purple-500/30 hover:border-purple-400'}">
+              <div class="text-xl mb-1">💳</div>
+              <div class="text-xs font-bold text-white">Tarjeta Crédito/Débito</div>
+              <div class="text-[11px] text-slate-400">Visa, Mastercard, AMEX</div>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('spei')" class="p-3.5 rounded-xl border text-left transition ${selectedPayment === 'spei' ? 'bg-purple-950/80 border-cyan-400 shadow-[0_0_14px_rgba(6,182,212,0.3)]' : 'bg-void border-purple-500/30 hover:border-purple-400'}">
+              <div class="text-xl mb-1">🏦</div>
+              <div class="text-xs font-bold text-white">Transferencia SPEI</div>
+              <div class="text-[11px] text-slate-400">Validación instantánea</div>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('wallet')" class="p-3.5 rounded-xl border text-left transition ${selectedPayment === 'wallet' ? 'bg-purple-950/80 border-cyan-400 shadow-[0_0_14px_rgba(6,182,212,0.3)]' : 'bg-void border-purple-500/30 hover:border-purple-400'}">
+              <div class="text-xl mb-1">📱</div>
+              <div class="text-xs font-bold text-white">Mercado Pago / PayPal</div>
+              <div class="text-[11px] text-slate-400">Billetera digital</div>
+            </button>
+          </div>
+
+          <form onsubmit="confirmSimulatedOrder(event)" class="space-y-4">
+            ${selectedPayment === 'card' ? `
+              <div class="p-4 rounded-xl bg-void border border-purple-500/30 space-y-3">
+                <p class="text-xs text-cyan-300 font-semibold">Datos ficticios de tarjeta para demostración:</p>
+                <div>
+                  <label class="block text-xs text-slate-400 mb-1">Número de tarjeta (simulado)</label>
+                  <input type="text" required value="4532 •••• •••• 8842"
+                    class="w-full px-3.5 py-2 rounded-lg bg-panel border border-purple-500/35 text-sm font-mono text-white focus:outline-none focus:border-cyan-400" />
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">Vigencia</label>
+                    <input type="text" required value="11/29"
+                      class="w-full px-3.5 py-2 rounded-lg bg-panel border border-purple-500/35 text-sm font-mono text-white" />
+                  </div>
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">CVV</label>
+                    <input type="text" required value="742"
+                      class="w-full px-3.5 py-2 rounded-lg bg-panel border border-purple-500/35 text-sm font-mono text-white" />
+                  </div>
+                </div>
+              </div>
+            ` : selectedPayment === 'spei' ? `
+              <div class="p-4 rounded-xl bg-void border border-cyan-500/35 space-y-2 text-xs">
+                <p class="font-bold text-cyan-300">Ficha de Transferencia SPEI (Entorno de Prueba)</p>
+                <p class="text-slate-300">Beneficiario: <strong>TRIVANT A.L S.A.P.I. de C.V.</strong></p>
+                <p class="text-slate-300">CLABE Simulada: <span class="font-mono text-white bg-slate-900 px-2 py-0.5 rounded">6461 8011 0400 2026 98</span></p>
+                <p class="text-slate-400">Al confirmar, el sistema simulará la conciliación bancaria inmediata.</p>
+              </div>
+            ` : `
+              <div class="p-4 rounded-xl bg-void border border-purple-500/35 space-y-2 text-xs">
+                <p class="font-bold text-purple-300">Conexión Simulada con Wallet Digital</p>
+                <p class="text-slate-300">Cuenta vinculada: <strong>${escapeHTML(customerData.email)}</strong></p>
+                <p class="text-slate-400">Autorización rápida en 1 clic sin ingresar datos bancarios reales.</p>
+              </div>
+            `}
+
+            <div class="pt-3 flex justify-between gap-3">
+              <button type="button" onclick="checkoutStep = 4; renderCheckout();" class="px-4 py-2.5 rounded-xl border border-slate-600 text-sm text-slate-300 hover:text-white">← Volver a Datos</button>
+              <button id="btn-confirm-pay" type="submit" class="neon-btn-primary px-6 py-3 rounded-xl text-sm font-bold text-white">
+                Confirmar Pedido (${formatMXN(totals.total)})
+              </button>
+            </div>
+          </form>
+        `;
+      }
+
+      // PASO 6: CONFIRMACIÓN DEL PEDIDO (sanitizado + optimizado para impresión PDF)
+      else if (checkoutStep === 6 && lastOrder) {
+        const payNames = {
+          card: "Tarjeta de Crédito/Débito (Simulada)",
+          spei: "Transferencia SPEI (Simulada)",
+          wallet: "Mercado Pago / PayPal (Simulado)"
+        };
+
+        container.innerHTML = `
+          <div id="receipt-printable" class="space-y-5">
+            <div class="print-box text-center py-4 px-4 rounded-2xl bg-gradient-to-b from-emerald-950/60 to-void border border-emerald-400/50">
+              <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-300 text-2xl flex items-center justify-center mb-3">✓</div>
+              <span class="text-xs font-mono uppercase tracking-widest text-emerald-300">Paso 6 · Pedido Confirmado</span>
+              <h4 class="font-display text-2xl font-bold text-white mt-1">¡Gracias por confiar en TRIVANT A.L!</h4>
+              <p class="text-xs text-slate-300 mt-1">Hemos enviado tu comprobante y accesos a <strong>${escapeHTML(lastOrder.customer.email)}</strong>.</p>
+              <div class="mt-3 inline-block px-4 py-1.5 rounded-lg bg-slate-950 border border-cyan-400/50 font-mono text-sm font-bold text-cyan-300 print-accent-text">
+                FOLIO: ${escapeHTML(lastOrder.folio)}
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 text-xs">
+              <div class="print-box p-4 rounded-xl bg-void border border-purple-500/25 space-y-1.5">
+                <p class="font-mono uppercase text-purple-300 font-bold">Datos del Titular</p>
+                <p class="text-white font-semibold">${escapeHTML(lastOrder.customer.fullName)}</p>
+                <p class="text-slate-400">${escapeHTML(lastOrder.customer.address)}, CP ${escapeHTML(lastOrder.customer.zip)}</p>
+                <p class="text-slate-400">${escapeHTML(lastOrder.customer.city)} · Tel: ${escapeHTML(lastOrder.customer.phone)}</p>
+                ${lastOrder.customer.petOrPlate ? `<p class="text-cyan-300 print-accent-text">Ref. Protegida: ${escapeHTML(lastOrder.customer.petOrPlate)}</p>` : ''}
+              </div>
+
+              <div class="print-box p-4 rounded-xl bg-void border border-cyan-500/25 space-y-1.5">
+                <p class="font-mono uppercase text-cyan-300 font-bold print-accent-text">Activación &amp; Logística</p>
+                <p class="text-slate-300">Fecha: <strong>${escapeHTML(lastOrder.date)}</strong></p>
+                <p class="text-slate-300">Método: <strong>${payNames[lastOrder.payment]}</strong></p>
+                ${lastOrder.policyCode ? `<p class="text-emerald-300">🛡️ Certificado Póliza: <span class="font-mono font-bold">${escapeHTML(lastOrder.policyCode)}</span></p>` : ''}
+                ${lastOrder.trackingCode ? `<p class="text-cyan-300 print-accent-text">📦 Guía de Envío: <span class="font-mono font-bold">${escapeHTML(lastOrder.trackingCode)}</span></p>` : ''}
+              </div>
+            </div>
+
+            <div class="print-box p-4 rounded-xl bg-void border border-purple-500/25 space-y-2 text-xs">
+              <p class="font-mono uppercase text-slate-400 font-bold">Resumen de Artículos</p>
+              ${lastOrder.items.map(i => `
+                <div class="flex justify-between text-slate-200">
+                  <span>${i.qty}× ${i.name} (${i.billing})</span>
+                  <span class="font-semibold">${formatMXN(i.price * i.qty)}</span>
+                </div>
+              `).join("")}
+              <div class="pt-2 border-t border-purple-500/25 flex justify-between text-sm font-bold text-white">
+                <span>Total Pagado${lastOrder.totals.hybridDiscountActive ? ' (incluye 10% Desc. Híbrido)' : ''}</span>
+                <span class="font-display text-cyan-300 print-accent-text">${formatMXN(lastOrder.totals.total)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="no-print mt-6 flex flex-wrap justify-between gap-3">
+            <button type="button" onclick="window.print()" class="px-4 py-2.5 rounded-xl border border-cyan-400/50 text-cyan-300 hover:bg-cyan-950/50 text-sm font-semibold">
+              🖨️ Imprimir / Guardar PDF
+            </button>
+            <button type="button" onclick="closeCheckout()" class="neon-btn-primary px-6 py-2.5 rounded-xl text-sm font-bold text-white">
+              Finalizar y Volver a la Tienda
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Atajo de demostración: rellena automáticamente los datos del cliente en el Paso 4.
+     * @returns {void}
+     */
+    function autofillDemoCustomer() {
+      customerData = {
+        fullName: "Leonardo Martínez Legorreta",
+        email: "leonardo.martinez@trivantal.com",
+        phone: "55 4820 9134",
+        address: "Av. Insurgentes Sur 1458, Col. Actipan",
+        city: "Ciudad de México, CDMX",
+        zip: "03230",
+        petOrPlate: "Rocky (Husky Siberiano, 3 años)"
+      };
+      renderCheckout();
+      showToast("Datos de prueba cargados para demostración");
+    }
+
+    /**
+     * Guarda los datos capturados del formulario del Paso 4 y avanza al Paso 5 (Pago).
+     * @param {SubmitEvent} e - Evento submit del formulario de cliente.
+     * @returns {void}
+     */
+    function saveCustomerAndNext(e) {
+      e.preventDefault();
+      customerData = {
+        fullName: document.getElementById("f-name").value.trim(),
+        email: document.getElementById("f-email").value.trim(),
+        phone: document.getElementById("f-phone").value.trim(),
+        address: document.getElementById("f-address").value.trim(),
+        zip: document.getElementById("f-zip").value.trim(),
+        city: document.getElementById("f-city").value.trim(),
+        petOrPlate: document.getElementById("f-ref").value.trim()
+      };
+      checkoutStep = 5;
+      renderCheckout();
+    }
+
+    /**
+     * Selecciona el método de pago simulado en el Paso 5.
+     * @param {"card"|"spei"|"wallet"} method - Identificador del método elegido.
+     * @returns {void}
+     */
+    function selectPaymentMethod(method) {
+      selectedPayment = method;
+      renderCheckout();
+    }
+
+    /**
+     * Simula la validación de pago, genera Folio, Póliza y/o Guía, limpia el carrito
+     * (y su persistencia en `localStorage`) y avanza al Paso 6.
+     * @param {SubmitEvent} e - Evento submit del formulario de pago.
+     * @returns {void}
+     */
+    function confirmSimulatedOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btn-confirm-pay");
+      btn.disabled = true;
+      btn.textContent = "Verificando transacción simulada...";
+
+      setTimeout(() => {
+        const totals = calculateCartTotals();
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        const now = new Date().toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" });
+
+        lastOrder = {
+          folio: `TRV-2026-${rand}`,
+          date: now,
+          customer: { ...customerData },
+          payment: selectedPayment,
+          items: cart.map(i => ({ ...i })),
+          totals,
+          policyCode: totals.hasInsurtech ? `POL-AL-${rand}` : null,
+          trackingCode: totals.hasPhysicalItems ? `MX-TRV-${rand}89` : null
+        };
+
+        cart = [];
+        saveCartToStorage();
+        updateCartUI();
+        checkoutStep = 6;
+        renderCheckout();
+      }, 650);
+    }
+
+    // ==================== FORMULARIO DE CONTACTO ====================
+
+    /**
+     * Maneja el envío simulado del formulario de contacto.
+     * @param {SubmitEvent} e - Evento submit del formulario de contacto.
+     * @returns {void}
+     */
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      document.getElementById("contact-success").classList.remove("hidden");
+      showToast("Mensaje enviado correctamente a TRIVANT A.L");
+      e.target.reset();
+    }
+
+    // ==================== INICIALIZACIÓN DE LA APLICACIÓN ====================
+
+    /**
+     * Inicializa el estado persistido, listeners de accesibilidad y vistas iniciales.
+     * @returns {void}
+     */
+    function initApp() {
+      cart = loadCartFromStorage();
+      initGlobalOverlayUX();
+      renderCategoryFilters();
+      renderCatalog();
+      updateCartUI();
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
